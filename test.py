@@ -35,7 +35,7 @@ class TestEbook:
         if len(wh_now) > len(wh_then):
             return set(wh_now).difference(set(wh_then)).pop()
 
-    def test_ebook(self):
+    def sign_in(self):
         self.driver.get(
             "https://www.tosyokan.pref.shizuoka.jp/licsxp-opac/WOpacMnuTopInitAction.do?WebLinkFlag=1&moveToGamenId=mylibrary"
         )
@@ -46,3 +46,6 @@ class TestEbook:
         self.driver.find_element(By.CSS_SELECTOR, ".exec").click()
         self.vars["window_handles"] = self.driver.window_handles
         self.driver.find_element(By.LINK_TEXT, "電子図書館").click()
+
+    def test_ebook(self):
+        self.sign_in()

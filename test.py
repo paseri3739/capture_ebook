@@ -17,6 +17,7 @@ load_dotenv()
 
 USER_NAME = os.getenv("USER_NAME")
 PASSWORD = os.getenv("PASSWORD")
+INITIAL_PAGE = os.getenv("INITIAL_PAGE")
 
 
 # classの名前はTestで始まらなければならない
@@ -37,9 +38,7 @@ class TestEbook:
             return set(wh_now).difference(set(wh_then)).pop()
 
     def sign_in(self):
-        self.driver.get(
-            "https://www.tosyokan.pref.shizuoka.jp/licsxp-opac/WOpacMnuTopInitAction.do?WebLinkFlag=1&moveToGamenId=mylibrary"
-        )
+        self.driver.get(INITIAL_PAGE)
         self.driver.set_window_size(1440, 900)
         self.driver.find_element(By.ID, "usrcardnumber").send_keys(USER_NAME)
         self.driver.find_element(By.ID, "password").click()

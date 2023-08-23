@@ -10,18 +10,23 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import os
+from dotenv import load_dotenv
+
+# .envファイルを読み込む
+load_dotenv()
 
 USER_NAME = os.getenv("USER_NAME")
 PASSWORD = os.getenv("PASSWORD")
 
 
-class EbookTest:
-    def __init__(self, method) -> None:
+class TestEbook:
+    def setup_method(self, method):
         self.driver = webdriver.Firefox()
         self.vars = {}
 
     def teardown_method(self):
-        self.driver.quit()
+        # self.driver.quit()
+        pass
 
     def wait_for_window(self, timeout=2):
         time.sleep(round(timeout / 1000))
@@ -42,24 +47,3 @@ class EbookTest:
         self.driver.find_element(By.CSS_SELECTOR, ".exec").click()
         self.vars["window_handles"] = self.driver.window_handles
         self.driver.find_element(By.LINK_TEXT, "電子図書館").click()
-        self.vars["win1212"] = self.wait_for_window(2000)
-        self.driver.switch_to.window(self.vars["win1212"])
-        self.driver.find_element(By.CSS_SELECTOR, "div:nth-child(5) .jss281:nth-child(2) .jss283").click()
-        element = self.driver.find_element(By.CSS_SELECTOR, "div:nth-child(5) .jss281:nth-child(2) .jss283")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
-        element = self.driver.find_element(By.CSS_SELECTOR, "body")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element, 0, 0).perform()
-        element = self.driver.find_element(By.CSS_SELECTOR, "#buttonArea > .MuiButton-label-809")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element).perform()
-        self.vars["window_handles"] = self.driver.window_handles
-        self.driver.find_element(By.CSS_SELECTOR, "#buttonArea > .MuiButton-label-809").click()
-        self.vars["win288"] = self.wait_for_window(2000)
-        element = self.driver.find_element(By.CSS_SELECTOR, "body")
-        actions = ActionChains(self.driver)
-        actions.move_to_element(element, 0, 0).perform()
-        self.driver.switch_to.window(self.vars["win288"])
-        self.driver.switch_to.frame(0)
-        self.driver.find_element(By.CSS_SELECTOR, ".aligncenter").click()

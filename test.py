@@ -19,6 +19,7 @@ USER_NAME = os.getenv("USER_NAME")
 PASSWORD = os.getenv("PASSWORD")
 
 
+# classの名前はTestで始まらなければならない
 class TestEbook:
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -47,5 +48,6 @@ class TestEbook:
         self.vars["window_handles"] = self.driver.window_handles
         self.driver.find_element(By.LINK_TEXT, "電子図書館").click()
 
+    # test実行時にはここがmain扱いになる。pytestで実行される部分はtestで始まらなければならない。
     def test_ebook(self):
         self.sign_in()

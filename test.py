@@ -41,7 +41,6 @@ class TestEbook:
         )
         self.driver.set_window_size(1440, 900)
         self.driver.find_element(By.ID, "usrcardnumber").send_keys(USER_NAME)
-        self.driver.find_element(By.CSS_SELECTOR, ".form-base1").click()
         self.driver.find_element(By.ID, "password").click()
         self.driver.find_element(By.ID, "password").send_keys(PASSWORD)
         self.driver.find_element(By.CSS_SELECTOR, ".exec").click()

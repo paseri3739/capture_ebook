@@ -4,6 +4,7 @@ import time
 import json
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
@@ -47,6 +48,53 @@ class TestEbook:
         self.vars["window_handles"] = self.driver.window_handles
         self.driver.find_element(By.LINK_TEXT, "電子図書館").click()
 
+    def check_pdf_or_epub(self):
+        # 共通のXPathの一部
+        common_xpath = "/html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/"
+
+        # 形式情報を表示する要素のインデックスごとに処理を分岐
+        for index in range(4, 6):  # 4から5までのインデックスをループ
+            xpath = common_xpath + f"div[{index}]/span[2]"
+            format_info_element = self.driver.find_element(By.XPATH, xpath)
+            format_info_text = format_info_element.text.lower()
+
+            if "PDF" in format_info_text:
+                alert = Alert(self.driver)
+                alert_text = f"PDF found on the page!"
+                alert.send_keys(alert_text)  # 必要に応じてアラートにテキストを入力
+                # alert.accept()  # アラートを受け入れる
+
+            elif "EPUB" in format_info_text:
+                alert = Alert(self.driver)
+                alert_text = f"EPUB found on the page!"
+                alert.send_keys(alert_text)
+            else:
+                alert = Alert(self.driver)
+                alert_text = f"Unknown Format!"
+                alert.send_keys(alert_text)
+
+    def scrape_epub(self):
+        # EPUBのスクレイピング処理
+        pass
+
+    def scrape_pdf(self):
+        # PDFのスクレイピング処理
+        pass
+
     # test実行時にはここがmain扱いになる。pytestで実行される部分はtestで始まらなければならない。
     def test_ebook(self):
         self.sign_in()
+
+
+# epubContent(普通のイメージのページ)
+# imageContents(表紙とか、HTMLで制御されていない自炊系の電子書籍) -> 形式: PDFになっている
+# screenDiv(画面全体、見開き範囲外まで)
+# class pageContainer(htmlのとき、見開き)
+# スペースバー押下1回でUIが隠れる
+# 書籍情報に形式:EPUBとあるものはHTMLで記述されている -> 形式を検知し、それに応じたスクレイピングを行う
+# 形式: PDF 普通にスクレイピング可能
+# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] PDF
+# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] PDF
+# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[5]/span[2] EPUB
+# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] EPUB
+# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[position()=4 or position()=5] を使う

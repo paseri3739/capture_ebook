@@ -47,18 +47,7 @@ class EBookScraper:
                 break
 
     @classmethod
-    def check_pdf_or_epub(cls):
-        cls.driver.execute_script("alert('Function Called!');")
-
-        while True:
-            try:
-                # アラートにスイッチ
-                alert = cls.driver.switch_to.alert
-                # 少し待機
-                time.sleep(1)
-            except:
-                # アラートが存在しない場合、ループを抜ける
-                break
+    def get_ebook_type(cls) -> str:
         while True:
             try:
                 second_xpath = "/html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[2]/span[1]"
@@ -76,14 +65,8 @@ class EBookScraper:
             ebooktype_xpath = "/html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[5]/span[2]"
 
         format_info_element = cls.driver.find_element(By.XPATH, ebooktype_xpath)
-        format_info_text = format_info_element.text
-
-        if "PDF" in format_info_text:
-            cls.driver.execute_script("alert('PDF found on the page!');")
-        elif "EPUB" in format_info_text:
-            cls.driver.execute_script("alert('EPUB found on the page!');")
-        else:
-            cls.driver.execute_script("alert('Unknown Format!');")
+        format_info_text: str = format_info_element.text
+        return format_info_text
 
     @classmethod
     def scrape_epub(cls):
@@ -100,7 +83,7 @@ class EBookScraper:
             while True:
                 current_url = cls.driver.current_url
                 if INFORMATION_URL in current_url:
-                    cls.check_pdf_or_epub()
+                    print(cls.get_ebook_type())
                 time.sleep(3)
         except KeyboardInterrupt:
             pass
@@ -119,8 +102,3 @@ if __name__ == "__main__":
 # スペースバー押下1回でUIが隠れる
 # 書籍情報に形式:EPUBとあるものはHTMLで記述されている -> 形式を検知し、それに応じたスクレイピングを行う
 # 形式: PDF 普通にスクレイピング可能
-# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] PDF
-# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] PDF
-# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[5]/span[2] EPUB
-# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[4]/span[2] EPUB
-# /html/body/div[2]/div[3]/div/div/div[2]/div[1]/div[1]/div[3]/div[position()=4 or position()=5] を使う

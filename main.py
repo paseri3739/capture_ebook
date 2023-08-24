@@ -92,10 +92,14 @@ class EBookScraper:
         pass
 
     def main_roop(self):
-        self.sign_in()
         try:
             while True:
-                if self.INFORMATION_URL in self.current_url:
+                # Switch to the most recently opened tab (or popup) and update the currenturl
+                recent_handle = self.driver.window_handles[-1]
+                self.driver.switch_to.window(recent_handle)
+                currenturl = self.driver.current_url
+
+                if self.INFORMATION_URL in currenturl:
                     print(self.get_ebook_type())
                 time.sleep(3)
         except KeyboardInterrupt:
@@ -104,5 +108,6 @@ class EBookScraper:
 
 if __name__ == "__main__":
     ebookscraper = EBookScraper()
+    ebookscraper.sign_in()
     ebookscraper.main_roop()
     ebookscraper.close_driver()

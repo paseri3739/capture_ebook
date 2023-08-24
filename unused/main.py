@@ -84,12 +84,17 @@ class EBookScraper:
         if self.is_ui_visible():
             self.actions.send_keys(Keys.SPACE)
 
+    def is_last_page(self) -> bool:
+        snackbar = self.driver.find_element(By.CSS_SELECTOR, ".MuiSnackbar-root")
+        if snackbar is not None:
+            return True
+        return False
+
     def scrape_epub(self):
-        if self.is_ui_visible():
-            self.actions.send_keys(Keys.ARROW_RIGHT)
+        self.hide_ui()
 
     def scrape_pdf(self):
-        pass
+        self.hide_ui()
 
     def main_roop(self):
         try:

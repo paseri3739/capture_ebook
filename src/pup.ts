@@ -1,6 +1,13 @@
-const puppeteer = require('puppeteer');
+const puppeteer = require("puppeteer");
+// index.ts or app.ts
+import dotenv from 'dotenv';
+
+// dotenv の設定を読み込む
+dotenv.config();
 
 (async () => {
+    const initialUrl = process.env.INITIAL_URL
+    console.log(initialUrl)
     // ブラウザを開く
     const browser = await puppeteer.launch({ headless: false });  // headlessをfalseにしてUIを見ながら操作できるようにする
     const page = await browser.newPage();
@@ -10,7 +17,7 @@ const puppeteer = require('puppeteer');
     await page.waitForTimeout(30000);  // 30秒待つ
 
     // 起点となるURLに遷移
-    await page.goto('https://example.com/start');
+    await page.goto(initialUrl);
 
     // スクリーンショットを撮るDOM要素を選択
     const element = await page.$('#targetElementId'); // CSSセレクタを使用して要素を選択

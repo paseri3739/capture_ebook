@@ -1,4 +1,4 @@
-import { Page } from 'playwright';
+import { Page } from 'puppeteer';
 import readlineModule from 'readline';
 
 async function loopQuestion(page: Page) {

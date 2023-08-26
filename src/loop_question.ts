@@ -1,4 +1,4 @@
-import { Page } from 'puppeteer';
+import { Page } from 'playwright';
 import readlineModule from 'readline';
 
 async function loopQuestion(page: Page) {
@@ -6,11 +6,13 @@ async function loopQuestion(page: Page) {
         input: process.stdin,
         output: process.stdout
     });
+    // 現在のページのURLを取得
+    const currentUrl = page.url();
+    console.log(`Current URL: ${currentUrl}`);
 
     readl.question('Press Enter when done.', async (answer: string) => {
         readl.close();
-        //const ebookType: string = await getEbookType(page);
-        //console.log("Ebook Type:", ebookType);
+
         const links = await page.$$eval('a', anchors => {
             return anchors.map(anchor => {
                 return {
@@ -20,7 +22,6 @@ async function loopQuestion(page: Page) {
             });
         });
 
-        // 取得したリンクをコンソールに出力する
         console.log(links);
         loopQuestion(page);  // 再帰的に質問を繰り返す
     });

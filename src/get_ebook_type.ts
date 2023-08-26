@@ -1,8 +1,9 @@
-import { Page } from 'puppeteer';
+import { Page } from 'playwright';
 
 async function getEbookType(page: Page): Promise<string> {
     const xpathForFormat = "//span[contains(text(), '形式') and contains(text(), ':')]/following-sibling::span[1]";
-    const formatElements = await page.$x(xpathForFormat);
+    const formatElements = await page.$$(xpathForFormat);
+
 
     if (formatElements.length > 0) {
         const formatElement = formatElements[0];

@@ -1,6 +1,6 @@
 import { Page } from 'puppeteer';
 import readlineModule from 'readline';
-import { getEbookType } from "./get_ebook_type";
+import { getEbookType } from './get_ebook_type';
 
 async function loopQuestion(page: Page) {
     const readl = readlineModule.createInterface({
@@ -10,13 +10,20 @@ async function loopQuestion(page: Page) {
 
     readl.question('Press Enter when done.', async (answer: string) => {
         readl.close();
-        const ebookType: string = await getEbookType(page);
+
+        // getEbookType関数を文字列化してブラウザ内で実行
+        const ebookType: string = await page.evaluate(`
+            (${getEbookType.toString()})()
+        `) as string;
+
         console.log("Ebook Type:", ebookType);
+
         await page.evaluate((ebookType: string) => {
             window.alert(ebookType);
         }, ebookType);
-        loopQuestion(page);  // 再帰的に質問を繰り返す
+
+        loopQuestion(page);
     });
-};
+}
 
 export { loopQuestion };

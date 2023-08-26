@@ -1,21 +1,13 @@
-import { Page } from 'puppeteer';
+function getEbookType() {
+    // "形式:" というテキストを含む span 要素を探す
+    let xpathForFormat = "//span[contains(text(), '形式')]/following-sibling::span[1]";
+    let formatElement = document.evaluate(xpathForFormat, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
-async function getEbookType(page: Page): Promise<string> {
-    const xpathForFormat = "//span[contains(text(), '形式:')]/following-sibling::span[1]";
-    const formatElements = await page.$x(xpathForFormat);
+    if (formatElement && formatElement.textContent) {
+        // 次の span 要素のテキストを取得
+        let formatText = formatElement.textContent.trim();
 
-    if (formatElements.length > 0) {
-        const formatElement = formatElements[0];
-
-        const formatText = await page.evaluate((el: Node) => {
-            if (el.textContent !== null) {
-                return el.textContent.trim();
-            } else {
-                return "";
-            }
-        }, formatElement);
-
-
+        // テキストが "PDF" か "EPUB" かを判定
         if (formatText === "PDF") {
             return "PDF";
         }

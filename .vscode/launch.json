@@ -5,6 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Current File via ts-node",
+            "console": "integratedTerminal",
             "runtimeArgs": [
                 "-r",
                 "ts-node/register"

@@ -12,8 +12,7 @@ dotenvConfig();
 
     // ここで login 関数を呼び出す
     await login(page, browser);
-    console.log("Please complete the manual step and then press Enter.");
 
-    loopQuestion(page);
+    await loopQuestion(page);
 
 })();

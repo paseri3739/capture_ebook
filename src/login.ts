@@ -23,7 +23,7 @@ async function login(page: Page, browser: Browser): Promise<Page> {
     // Switch to the last tab and bring it to the front using the new function
     const lastPage = await switchToLastTab(browser);
     if (lastPage !== null) {
-        console.log(await lastPage.url());
+        console.log("moved to: " + await lastPage.url());
     } else {
         console.log("Could not switch to the last tab.");
     }

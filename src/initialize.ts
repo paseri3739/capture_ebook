@@ -1,7 +1,7 @@
 import { Browser, Page, chromium } from 'playwright';
 
 async function initialize(initialUrl: string): Promise<{ browser: Browser, page: Page }> {
-    console.log(initialUrl);
+    console.log("Initial URL: " + initialUrl);
 
     const browser: Browser = await chromium.launch({ headless: false });
     const page: Page = await browser.newPage();

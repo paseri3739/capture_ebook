@@ -1,22 +1,30 @@
+// main.ts
 import { config as dotenvConfig } from 'dotenv';
+import readlineModule from 'readline';
 import { initialize } from './initialize';
 import { login } from './login';
-import { loopQuestion } from './loop_question';
+import { processPage } from './process_page';
 
 dotenvConfig();
 
 (async () => {
     const initialUrl = process.env.INITIAL_URL as string;
-
     const { browser, page } = await initialize(initialUrl);
+    const newPage = await login(page, browser);
 
-    const context = await browser.newContext();  // BrowserからBrowserContextを取得
+    // readline インターフェースを一度だけ作成
+    const readl = readlineModule.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-    // login関数から新しいPageオブジェクトを取得
-    const newPage = await login(page, browser);  // 修正された部分
-
-    // 新しいPageオブジェクトをloopQuestionに渡す
-    await loopQuestion(newPage);
-
+    // 無限ループ
+    while (true) {
+        await new Promise(resolve => {
+            readl.question('Press Enter when done.', async (answer: string) => {
+                await processPage(newPage);
+                resolve(null);
+            });
+        });
+    }
 })();
-

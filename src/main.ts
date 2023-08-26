@@ -10,9 +10,10 @@ dotenvConfig();
 
     const { browser, page } = await initialize(initialUrl);
 
-    // ここで login 関数を呼び出す
-    await login(page, browser);
+    // login関数から新しいPageオブジェクトを取得
+    const newPage = await login(page, browser);
 
-    await loopQuestion(page);
+    // 新しいPageオブジェクトをloopQuestionに渡す
+    await loopQuestion(newPage);
 
 })();

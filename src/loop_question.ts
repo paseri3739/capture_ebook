@@ -12,9 +12,6 @@ async function loopQuestion(page: Page) {
         readl.close();
         const ebookType: string = await getEbookType(page);
         console.log("Ebook Type:", ebookType);
-        await page.evaluate((ebookType: string) => {
-            window.alert(ebookType);
-        }, ebookType);
         loopQuestion(page);  // 再帰的に質問を繰り返す
     });
 };

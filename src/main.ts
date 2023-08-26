@@ -16,10 +16,4 @@ dotenvConfig();
 
     loopQuestion(page);
 
-    // ctrl-c の割り込みを検出
-    process.on('SIGINT', () => {
-        console.log('Exiting...');
-        process.exit(0);
-    });
-
 })();

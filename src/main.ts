@@ -12,7 +12,7 @@ dotenvConfig();
     const { browser, page } = await initialize(initialUrl);
     const newPage = await login(page, browser);
 
-    // ページ遷移を監視
+    // ページ遷移を監視。 非同期処理なのでループ内でもイベントを起点に動作するようになっている。
     let currentUrl = await newPage.url();
     newPage.on('framenavigated', async frame => {
         const newUrl = frame.url();
@@ -32,7 +32,9 @@ dotenvConfig();
     // 無限ループ
     while (true) {
         await new Promise(resolve => {
-            readl.question('Press Enter when done.', async (answer: string) => {
+            readl.question('Press Enter when done.\n', async (answer: string) => {
+                await newPage.reload();
+                await newPage.waitForLoadState();
                 await processPage(newPage);
                 resolve(null);
             });

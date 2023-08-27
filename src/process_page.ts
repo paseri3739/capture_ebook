@@ -3,7 +3,7 @@ import { Page } from 'playwright';
 
 async function processPage(page: Page) {
     const currentUrl = await page.url();  // await を追加
-    console.log(`Current URL: ${currentUrl}`);
+    console.log(`Target URL: ${currentUrl}`);
 
     const links = await page.$$eval('a', anchors => {
         return anchors.map(anchor => {

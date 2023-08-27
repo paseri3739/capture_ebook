@@ -9,13 +9,22 @@ dotenvConfig();
 
 //main
 (async () => {
-    const initialUrl = process.env.INITIAL_URL as string;
-    const { browser, page } = await initialize(initialUrl);
-    const newPage = await login(page, browser);
+    try {
+        const initialUrl = process.env.INITIAL_URL;
+        if (!initialUrl) {
+            throw new Error("INITIAL_URL is not set in environment variables");
+        }
 
-    await observeDOMChanges(newPage);
+        const { browser, page } = await initialize(initialUrl);
+        const newPage = await login(page, browser);
 
-    await monitorURLChanges(newPage);
+        await observeDOMChanges(newPage);
+        await monitorURLChanges(newPage);
+        await interactWithConsole(newPage, browser);
 
-    await interactWithConsole(newPage, browser);
+        // Close browser or any other cleanup operations
+    } catch (err) {
+        console.error("An error occurred:", err);
+        // Handle error and cleanup resources
+    }
 })();

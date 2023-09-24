@@ -1,7 +1,7 @@
 import { config as dotenvConfig } from 'dotenv';
 import { Page } from 'playwright';
 import { initialize } from './initialize';
-import { interceptJsonRequest } from './intercept_json_request';
+import { EBookFormat, interceptJsonRequest } from './intercept_json_request';
 import { login } from './login';
 
 dotenvConfig();
@@ -18,11 +18,15 @@ dotenvConfig();
         const ebookIndexPage: Page = await login(page);
         console.log(ebookIndexPage.url());
 
-        // 特定のJSONリクエストをインターセプト
-        ebookIndexPage.route('**/*bookinfo.json', interceptJsonRequest);
-
-        // 何かしらのアクションをトリガーして、bookinfo.jsonにリクエストする必要があります
-        // 例: ebookIndexPage.click('selector');
+        let format: EBookFormat | null = null;
+        // 特定のJSONリクエストを監視する
+        ebookIndexPage.route('**/*bookinfo.json', async (route, request) => {
+            format = await interceptJsonRequest(route, request); // 戻り値を取得
+        });
+        if (format !== null) {
+            // ここでformatを使用する
+            console.log(`Obtained Format: ${EBookFormat[format]}`);
+        }
 
         // Close browser or any other cleanup operations
     } catch (err) {

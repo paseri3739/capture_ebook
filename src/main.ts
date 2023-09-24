@@ -1,6 +1,7 @@
 import { config as dotenvConfig } from 'dotenv';
 import { Page } from 'playwright';
 import { initialize } from './initialize';
+import { interceptJsonRequest } from './intercept_json_request';
 import { login } from './login';
 
 dotenvConfig();
@@ -17,7 +18,11 @@ dotenvConfig();
         const ebookIndexPage: Page = await login(page);
         console.log(ebookIndexPage.url());
 
+        // 特定のJSONリクエストをインターセプト
+        ebookIndexPage.route('**/*bookinfo.json', interceptJsonRequest);
 
+        // 何かしらのアクションをトリガーして、bookinfo.jsonにリクエストする必要があります
+        // 例: ebookIndexPage.click('selector');
 
         // Close browser or any other cleanup operations
     } catch (err) {

@@ -11,9 +11,10 @@ async function processPage(page: Page) {
 export { processPage };
 
 async function captureEbook(page: Page) {
-
+    // implement here
 }
 
+//sample function
 async function getAllLinks(page: Page) {
     const links = await page.$$eval('a', anchors => {
         return anchors.map(anchor => {

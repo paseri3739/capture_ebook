@@ -1,9 +1,7 @@
 import { config as dotenvConfig } from 'dotenv';
+import { Page } from 'playwright';
 import { initialize } from './initialize';
-import { interactWithConsole } from './interactWithConsole';
 import { login } from './login';
-import { monitorURLChanges } from './monitorURLChanges';
-import { observeDOMChanges } from './observe_dom_changes';
 
 dotenvConfig();
 
@@ -16,11 +14,10 @@ dotenvConfig();
         }
 
         const { browser, page } = await initialize(initialUrl);
-        const newPage = await login(page, browser);
+        const ebookIndexPage: Page = await login(page);
+        console.log(ebookIndexPage.url());
 
-        await observeDOMChanges(newPage);
-        await monitorURLChanges(newPage);
-        await interactWithConsole(newPage, browser);
+
 
         // Close browser or any other cleanup operations
     } catch (err) {
